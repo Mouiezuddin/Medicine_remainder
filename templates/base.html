@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MedRemind{% endblock %} — Medicine Reminder</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <!-- 3D Scene Background -->
+  <div class="bg-scene"></div>
+  <div class="bg-grid"></div>
+  
+  <div class="artifacts">
+    <div class="artifact pill pill-1"></div>
+    <div class="artifact pill pill-2"></div>
+    <div class="artifact pill pill-3"></div>
+    <div class="artifact pill pill-4"></div>
+    <div class="artifact sphere sphere-1"></div>
+    <div class="artifact sphere sphere-2"></div>
+    <div class="artifact sphere sphere-3"></div>
+    <div class="artifact med-cross mc-1"></div>
+    <div class="artifact med-cross mc-2"></div>
+    <div class="artifact med-cross mc-3"></div>
+    <div class="artifact ring ring-1"></div>
+    <div class="artifact ring ring-2"></div>
+    <div class="artifact ring ring-3"></div>
+    
+    <!-- Premium 3D Artifacts -->
+    <div class="artifact dna-container dna-1">
+      <div class="dna-pair" style="--i: 0"></div>
+      <div class="dna-pair" style="--i: 1"></div>
+      <div class="dna-pair" style="--i: 2"></div>
+      <div class="dna-pair" style="--i: 3"></div>
+      <div class="dna-pair" style="--i: 4"></div>
+      <div class="dna-pair" style="--i: 5"></div>
+      <div class="dna-pair" style="--i: 6"></div>
+      <div class="dna-pair" style="--i: 7"></div>
+      <div class="dna-pair" style="--i: 8"></div>
+      <div class="dna-pair" style="--i: 9"></div>
+    </div>
+    <div class="artifact molecule-3d mol-1">
+      <div class="atom central"></div>
+      <div class="bond b1"></div><div class="atom terminal t1"></div>
+      <div class="bond b2"></div><div class="atom terminal t2"></div>
+      <div class="bond b3"></div><div class="atom terminal t3"></div>
+    </div>
+
+    <!-- 3D Flowing Tablets -->
+    <div class="artifact tablet-3d t-1">
+      <div class="tablet-side tablet-front"></div>
+      <div class="tablet-side tablet-back"></div>
+      <div class="tablet-edge"></div>
+    </div>
+    <div class="artifact tablet-3d t-2">
+      <div class="tablet-side tablet-front"></div>
+      <div class="tablet-side tablet-back"></div>
+      <div class="tablet-edge"></div>
+    </div>
+    <div class="artifact tablet-3d t-3">
+      <div class="tablet-side tablet-front"></div>
+      <div class="tablet-side tablet-back"></div>
+      <div class="tablet-edge"></div>
+    </div>
+
+    <!-- Data Shards -->
+    <div class="artifact data-shard ds-1"></div>
+    <div class="artifact data-shard ds-2"></div>
+
+    <!-- Heartbeat Pulses -->
+    <div class="artifact heart-pulse hp-1"></div>
+    <div class="artifact heart-pulse hp-2"></div>
+  </div>
+
+  <div class="page-wrap">
+    {% if user.is_authenticated %}
+    <nav class="navbar">
+      <a href="{% url 'dashboard' %}" class="nav-brand">
+        <div class="brand-icon">💊</div>
+        <span>MedRemind</span>
+      </a>
+      
+      <div class="nav-links">
+        <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="{% url 'medicine_list' %}" class="nav-link {% if 'medicine' in request.resolver_match.url_name %}active{% endif %}">
+          <span class="material-symbols-outlined">medication</span>
+          <span>Medicines</span>
+        </a>
+        <a href="{% url 'reminder_list' %}" class="nav-link {% if 'reminder' in request.resolver_match.url_name %}active{% endif %}">
+          <span class="material-symbols-outlined">notifications</span>
+          <span>Reminders</span>
+        </a>
+
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle" id="theme-toggle" title="Toggle Theme">
+          <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+        </button>
+      </div>
+
+      <div class="nav-user">
+        <div class="nav-avatar">{{ user.username.0|upper }}</div>
+        <a href="{% url 'logout' %}" class="nav-link" title="Logout">
+          <span class="material-symbols-outlined">logout</span>
+        </a>
+      </div>
+    </nav>
+    {% endif %}
+
+    <main class="main">
+      {% block content %}{% endblock %}
+    </main>
+    
+    <!-- JS for Theme Toggle -->
+    <script>
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      const body = document.body;
+
+      // Check for saved theme
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        body.classList.add('light-mode');
+        if (themeIcon) themeIcon.textContent = 'light_mode';
+      }
+
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          body.classList.toggle('light-mode');
+          const isLight = body.classList.contains('light-mode');
+          localStorage.setItem('theme', isLight ? 'light' : 'dark');
+          themeIcon.textContent = isLight ? 'light_mode' : 'dark_mode';
+          
+          // Subtle feedback
+          themeToggle.style.transform = 'scale(1.2) rotate(15deg)';
+          setTimeout(() => themeToggle.style.transform = '', 300);
+        });
+      }
+    </script>
+
+    {% if user.is_authenticated %}
+    <button class="notif-btn" onclick="toggleNotifPanel()" title="Notifications">
+      <span class="material-symbols-outlined">notifications</span>
+      {% if active_reminders_count > 0 %}
+        <div class="notif-badge">{{ active_reminders_count }}</div>
+      {% endif %}
+    </button>
+
+    <div id="notif-panel" class="glass-card notif-panel">
+      <div class="notif-header">
+        <h3>Notifications</h3>
+        <button onclick="toggleNotifPanel()" style="background:transparent; border:none; color:var(--text-muted); cursor:pointer;">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="notif-content">
+        {% for rem in today_reminders %}
+        <div class="notif-item">
+          <div class="notif-icon">💊</div>
+          <div class="notif-text">
+            <strong>{{ rem.medicine.name }}</strong>
+            <p>Take at {{ rem.time|time:"h:i A" }}</p>
+          </div>
+        </div>
+        {% empty %}
+        <div style="padding: 2.5rem; text-align: center; opacity: 0.5;">
+          <p>No more reminders for today!</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="messages-container" id="msg-container">
+      {% for message in messages %}
+        <div class="msg msg-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="{% static 'js/notifications.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

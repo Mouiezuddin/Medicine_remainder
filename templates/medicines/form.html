@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="auth-wrap" style="padding: 0;">
+    <div class="glass-card form-card" style="max-width: 600px; width: 100%;">
+        <div style="text-align:center; margin-bottom: 2.5rem;">
+            <div class="brand-icon" style="width:60px; height:60px; margin:0 auto 1.5rem; font-size:2rem; background:linear-gradient(135deg, var(--primary), var(--accent)); border-radius:15px; display:flex; align-items:center; justify-content:center; box-shadow:var(--glow);">💊</div>
+            <h1 class="auth-title">{{ title }}</h1>
+            <p class="auth-sub">Manage your medication details below.</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p class="form-error">{{ field.errors.0 }}</p>
+                {% endif %}
+                {% if field.help_text %}
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">{{ field.help_text }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div style="display:flex; gap:1rem; margin-top:2.5rem;">
+                <button type="submit" class="btn btn-primary" style="flex:2; justify-content:center; padding:1rem;">
+                    {{ title }}
+                </button>
+                <a href="{% url 'medicine_list' %}" class="btn btn-ghost" style="flex:1; justify-content:center; padding:1rem;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<datalist id="medicine-names">
+    <option value="Paracetamol">
+    <option value="Ibuprofen">
+    <option value="Aspirin">
+    <option value="Amoxicillin">
+    <option value="Cetirizine">
+    <option value="Metformin">
+    <option value="Vitamin D3">
+    <option value="Vitamin C">
+</datalist>
+
+<datalist id="medicine-categories">
+    <option value="Painkiller">
+    <option value="Antibiotic">
+    <option value="Antihistamine">
+    <option value="Diabetes">
+    <option value="Supplement">
+    <option value="Vitamin">
+</datalist>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const medMap = {
+  'Paracetamol': 'Painkiller',
+  'Ibuprofen': 'Painkiller',
+  'Aspirin': 'Painkiller',
+  'Amoxicillin': 'Antibiotic',
+  'Metformin': 'Diabetes',
+  'Cetirizine': 'Antihistamine',
+  'Vitamin D3': 'Supplement',
+  'Vitamin C': 'Supplement'
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const nameInput = document.querySelector('input[name="name"]');
+    const catInput = document.querySelector('input[name="category"]');
+    
+    if (nameInput && catInput) {
+        nameInput.setAttribute('list', 'medicine-names');
+        catInput.setAttribute('list', 'medicine-categories');
+        
+        nameInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (medMap[val]) {
+                catInput.value = medMap[val];
+                catInput.style.boxShadow = '0 0 15px rgba(99, 244, 255, 0.4)';
+                setTimeout(() => catInput.style.boxShadow = '', 1000);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Register | MedRemind</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-scene"></div>
+    <div class="bg-grid"></div>
+
+    <div class="auth-wrap">
+        <div class="glass-card auth-card">
+            <div class="auth-logo">
+                <div class="auth-sphere" style="background: radial-gradient(circle at 30% 30%, #63f7ff, #00f4fe);">💊</div>
+                <h1 class="auth-title">Join MedRemind</h1>
+                <p class="auth-sub">Start your personalized wellness journey.</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="form-group">
+                    <label class="form-label">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.name }}" class="glass-input" required>
+                    {% if field.errors %}
+                        <p class="form-error">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-accent" style="width:100%; justify-content:center; padding:1rem; margin-top:1rem;">
+                    Create Account
+                </button>
+            </form>
+
+            <div style="text-align:center; margin-top:2rem; font-size:0.85rem; color:var(--text-muted);">
+                Already have an account? 
+                <a href="{% url 'login' %}" style="color:var(--secondary-fixed); text-decoration:none; font-weight:600;">Log in</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

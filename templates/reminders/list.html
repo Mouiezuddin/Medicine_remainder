@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Full Schedule{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Medication Schedule</h1>
+    <a href="{% url 'reminder_add' %}" class="btn btn-primary">+ Add Reminder</a>
+</div>
+
+<div class="glass-card" style="margin-bottom: 2rem; padding: 1.5rem;">
+    <form method="get" style="display:flex; align-items:flex-end; gap:1rem; flex-wrap:wrap;">
+        <div style="flex:1; min-width:200px;">
+            <label class="form-label" style="margin-bottom:0.5rem; display:block;">📅 Filter by Date</label>
+            <input type="date" name="date" class="glass-input" value="{{ selected_date|default:'' }}">
+        </div>
+        <button type="submit" class="btn btn-accent">Filter</button>
+        {% if selected_date %}
+            <a href="{% url 'reminder_list' %}" class="btn btn-ghost">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+{% if reminders %}
+    <div class="reminder-grid">
+        {% for reminder in reminders %}
+            <div class="glass-card reminder-card">
+                <div class="med-name">{{ reminder.medicine.name }}</div>
+                <div class="med-dosage">{{ reminder.medicine.dosage }}</div>
+                
+                <div class="reminder-time" style="margin-bottom:1rem;">
+                    🕐 {{ reminder.time|time:"h:i A" }}
+                    {% if reminder.date %} | 📅 {{ reminder.date|date:"M d" }}{% endif %}
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    {% if reminder.is_active %}
+                        <span class="badge-active">Active</span>
+                    {% else %}
+                        <span class="badge-inactive">Paused</span>
+                    {% endif %}
+                    
+                    <div style="display:flex; gap:0.5rem;">
+                        <a href="{% url 'reminder_edit' reminder.pk %}" class="btn btn-ghost btn-sm">Edit</a>
+                        <a href="{% url 'reminder_delete' reminder.pk %}" class="btn btn-ghost btn-sm" style="color:var(--error);">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="glass-card empty-state">
+        <div class="empty-icon">📅</div>
+        <div class="empty-title">No reminders found</div>
+        <p class="empty-sub">{% if selected_date %}Try a different date or clear the filter.{% else %}Your schedule is clear!{% endif %}</p>
+        <a href="{% url 'reminder_add' %}" class="btn btn-primary">Add Reminder</a>
+    </div>
+{% endif %}
+{% endblock %}

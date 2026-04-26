@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MedRemind | Your Health Simplified</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-scene"></div>
+    <div class="bg-grid"></div>
+
+    <div class="artifacts">
+        <div class="artifact pill pill-1"></div>
+        <div class="artifact pill pill-2"></div>
+        <div class="artifact sphere sphere-1"></div>
+        <div class="artifact dna-container dna-1">
+            <div class="dna-pair" style="--i: 0"></div>
+            <div class="dna-pair" style="--i: 1"></div>
+            <div class="dna-pair" style="--i: 2"></div>
+            <div class="dna-pair" style="--i: 3"></div>
+            <div class="dna-pair" style="--i: 4"></div>
+        </div>
+    </div>
+
+    <div class="auth-wrap">
+        <div class="glass-card auth-card" style="max-width: 800px; text-align: center;">
+            <div class="auth-logo">
+                <div class="auth-sphere" style="width: 100px; height: 100px; font-size: 3rem;">💊</div>
+                <h1 class="auth-title" style="font-size: 3rem; margin-bottom: 1.5rem;">MedRemind</h1>
+                <p class="auth-sub" style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 3rem;">
+                    Sync your medications, set smart reminders, and take control of your wellness with our premium digital medical cabinet.
+                </p>
+            </div>
+
+            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'register' %}" class="btn btn-primary" style="padding: 1.25rem 3rem; font-size: 1.1rem; border-radius: 20px;">
+                    Get Started
+                </a>
+                <a href="{% url 'login' %}" class="btn btn-ghost" style="padding: 1.25rem 3rem; font-size: 1.1rem; border-radius: 20px;">
+                    Sign In
+                </a>
+            </div>
+
+            <div style="margin-top: 4rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                <div style="padding: 1.5rem; border-radius: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🕒</div>
+                    <h3 style="margin-bottom: 0.5rem; color: #fff;">Smart Alerts</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Never miss a dose with real-time browser notifications.</p>
+                </div>
+                <div style="padding: 1.5rem; border-radius: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">📦</div>
+                    <h3 style="margin-bottom: 0.5rem; color: #fff;">Digital Cabinet</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Organize your medications by category and dosage.</p>
+                </div>
+                <div style="padding: 1.5rem; border-radius: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🧬</div>
+                    <h3 style="margin-bottom: 0.5rem; color: #fff;">Vitals Sync</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Track your health adherence with automated scoring.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

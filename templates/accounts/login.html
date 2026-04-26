@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Login | MedRemind</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-scene"></div>
+    <div class="bg-grid"></div>
+
+    <div class="auth-wrap">
+        <div class="glass-card auth-card">
+            <div class="auth-logo">
+                <div class="auth-sphere">💊</div>
+                <h1 class="auth-title">Welcome Back</h1>
+                <p class="auth-sub">Log in to manage your medical schedule.</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="form-error" style="text-align:center; margin-bottom:1rem;">
+                        {{ form.non_field_errors.0 }}
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="glass-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="glass-input" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:1rem; margin-top:1rem;">
+                    Sign In
+                </button>
+            </form>
+
+            <div style="text-align:center; margin-top:2rem; font-size:0.85rem; color:var(--text-muted);">
+                Don't have an account? 
+                <a href="{% url 'register' %}" style="color:var(--primary-light); text-decoration:none; font-weight:600;">Create one</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

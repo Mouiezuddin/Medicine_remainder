@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Medical Cabinet{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Medical Cabinet</h1>
+    <a href="{% url 'medicine_add' %}" class="btn btn-primary">
+        <span class="material-symbols-outlined">add_circle</span> Add Medicine
+    </a>
+</div>
+
+<div class="glass-card" style="padding: 1.5rem; overflow-x: auto;">
+    <table class="glass-table">
+        <thead>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Category</th>
+                <th>Dosage</th>
+                <th>Quantity</th>
+                <th style="text-align: right;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for med in medicines %}
+            <tr>
+                <td><strong>{{ med.name }}</strong></td>
+                <td style="color:var(--text-muted); font-size:0.9rem;">{{ med.category|default:"-" }}</td>
+                <td><span class="reminder-time" style="font-size:0.8rem;">{{ med.dosage }}</span></td>
+                <td>
+                    {% if med.quantity <= 5 %}
+                        <span class="badge-warning">Low: {{ med.quantity }}</span>
+                    {% else %}
+                        <span class="badge-active">{{ med.quantity }} left</span>
+                    {% endif %}
+                </td>
+                <td style="text-align: right;">
+                    <div style="display:flex; gap:0.5rem; justify-content: flex-end;">
+                        <a href="{% url 'medicine_edit' med.pk %}" class="btn btn-ghost btn-sm">Edit</a>
+                        <a href="{% url 'medicine_delete' med.pk %}" class="btn btn-ghost btn-sm" style="color:var(--error);">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 3rem; opacity: 0.5;">
+                    Your cabinet is empty. Add your first medication to get started.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -44,26 +44,34 @@ def setup():
     else:
         print("[!] requirements.txt not found. Skipping installation.")
 
-    # 4. Run Migrations
-    if not run_command(f"{python_exe} manage.py migrate", "Running database migrations"):
+    # 4. Run Migrations (includes automatic sample data seeding)
+    if not run_command(f"{python_exe} manage.py migrate", "Running database migrations and seeding sample data"):
         return
 
-    # 5. Seed Data
-    print("\n[+] Seeding database with sample medicines...")
-    run_command(f"{python_exe} manage.py create_sample_medicines", "Seeding sample medicines")
-    run_command(f"{python_exe} manage.py add_tablets", "Adding 3D tablet artifacts")
+    # 5. Create additional demo user if needed
+    print("\n[+] Setting up demo environment...")
+    run_command(f"{python_exe} manage.py create_sample_medicines --username demo --password demo123", "Creating additional demo data")
 
     # 6. Success Message
-    print("\n" + "="*50)
-    print("      🎉 SETUP COMPLETE SUCCESSFULLY! 🎉")
-    print("="*50)
-    print("\nTo start your application:")
+    print("\n" + "="*60)
+    print("      🎉 MEDREMINDER SETUP COMPLETE! 🎉")
+    print("="*60)
+    print("\n📋 Your medicine reminder app is ready!")
+    print("\n🔑 Demo Login Credentials:")
+    print("   Username: demo")
+    print("   Password: demo123")
+    print("\n🚀 To start your application:")
     if sys.platform == "win32":
-        print(f"  1. Activate venv: .\\.venv\\Scripts\\activate")
+        print("   1. Activate venv: .\\.venv\\Scripts\\activate")
     else:
-        print(f"  1. Activate venv: source .venv/bin/activate")
-    print("  2. Run server:    python manage.py runserver")
-    print("\nHappy Coding!\n")
+        print("   1. Activate venv: source .venv/bin/activate")
+    print("   2. Run server:    python manage.py runserver")
+    print("   3. Open browser:  http://127.0.0.1:8000/")
+    print("\n💊 Sample Data Included:")
+    print("   • 15 common medicines with realistic dosages")
+    print("   • Tablet quantities for inventory tracking")
+    print("   • Ready-to-use demo account")
+    print("\nHappy Coding! 🚀\n")
 
 if __name__ == "__main__":
     setup()

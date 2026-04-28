@@ -29,37 +29,110 @@ medreminder/
 
 ## Quick Start
 
+### Option 1: Automated Setup (Recommended)
 ```bash
-# 1. Clone / extract project
+# 1. Clone the repository
+git clone <repository-url>
 cd medreminder
 
-# 2. Install Django
-pip install django
+# 2. Run automated setup (creates venv, installs deps, runs migrations, seeds data)
+python setup.py
 
-# 3. Run migrations
-python manage.py migrate
+# 3. Activate virtual environment
+# Windows:
+.\.venv\Scripts\activate
+# Linux/Mac:
+source .venv/bin/activate
 
-# 4. (Optional) Create superuser
-python manage.py createsuperuser
-
-# 5. Start server
+# 4. Start server
 python manage.py runserver
 
-# 6. Open browser
+# 5. Open browser and login
 #    http://127.0.0.1:8000/
+#    Username: demo
+#    Password: demo123
+```
+
+### Option 2: Manual Setup
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd medreminder
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Run migrations (includes sample data)
+python manage.py migrate
+
+# 4. Start server
+python manage.py runserver
+
+# 5. Open browser and login
+#    http://127.0.0.1:8000/
+#    Username: demo
+#    Password: demo123
+```
+
+## Sample Data
+The project includes comprehensive medicine data that gets created automatically:
+
+### Automatic Medicine Library (50+ Common Medicines)
+- **New users**: Automatically receive 50+ common medicines when they register
+- **Existing users**: Run `python manage.py add_common_medicines` to add the full library
+- **Categories included**: Pain relief, antibiotics, cardiovascular, diabetes, vitamins, allergy medications, and more
+- **Realistic data**: Each medicine includes proper dosage, category, and typical quantities
+
+### Legacy Sample Data
+The project also includes sample medicines data that gets created automatically when you run migrations. This includes:
+- 15 common medicines with realistic dosages
+- Tablet quantities ranging from 6-100 tablets
+- A demo user account (username: `demo`, password: `demo123`)
+
+### Manual Sample Data Creation
+If you need to create sample data for a different user:
+```bash
+# Create sample data for a specific user
+python manage.py create_sample_medicines --username myuser --password mypass
+
+# Add 50 tablets to all existing medicines
+python manage.py add_tablets --quantity 50
+
+# Add common medicines to all users
+python manage.py add_common_medicines
+
+# Add common medicines to specific user only
+python manage.py add_common_medicines --user username
+
+# View medicine statistics
+python manage.py medicine_stats
 ```
 
 ## Features
 - ✅ User registration & login (Django auth)
-- ✅ Add/Edit/Delete medicines (name + dosage)
+- ✅ **NEW**: 50+ common medicines automatically added to new users
+- ✅ Add/Edit/Delete medicines with tablet quantity tracking
 - ✅ Set multiple time-based reminders per medicine
+- ✅ **NEW**: Add medicines directly from reminder form (inline medicine creation)
 - ✅ Toggle reminders active/paused
-- ✅ Dashboard with live clock + active reminder cards
+- ✅ Dashboard with live clock + active reminder cards + medicine statistics
 - ✅ Browser push notifications (checks every minute)
+- ✅ Tablet inventory management with visual indicators
+- ✅ Sample data included for quick demo
 - ✅ 3D glassmorphism UI with floating medical artifacts
 - ✅ 3D tilt effect on hover (mousemove perspective)
 - ✅ Floating pill, sphere, cross, ring animations
 - ✅ Responsive mobile layout
+
+## Enhanced Reminder Creation
+When creating a new reminder at `/reminders/add/`, users can now:
+1. **Select existing medicine** from their medicine list, OR
+2. **Add new medicine inline** by checking "Add new medicine instead"
+   - Enter medicine name, category, dosage, and quantity
+   - Medicine is automatically created and linked to the reminder
+   - Perfect for users who don't have any medicines set up yet
+
+This streamlined workflow eliminates the need to navigate between different sections when setting up reminders.
 
 ## UI Design Notes
 - **Glassmorphism**: backdrop-filter blur + rgba backgrounds

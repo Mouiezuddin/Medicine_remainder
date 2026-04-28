@@ -22,8 +22,25 @@ def reminder_list(request):
 def reminder_add(request):
     form = ReminderForm(user=request.user, data=request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, 'Reminder set!')
+        # Check if user wants to add a new medicine
+        if form.cleaned_data.get('add_new_medicine'):
+            # Create new medicine
+            new_medicine = Medicine.objects.create(
+                user=request.user,
+                name=form.cleaned_data['new_medicine_name'],
+                category=form.cleaned_data.get('new_medicine_category', ''),
+                dosage=form.cleaned_data['new_medicine_dosage'],
+                quantity=form.cleaned_data.get('new_medicine_quantity', 0)
+            )
+            # Create reminder with the new medicine
+            reminder = form.save(commit=False)
+            reminder.medicine = new_medicine
+            reminder.save()
+            messages.success(request, f'New medicine "{new_medicine.name}" added and reminder set!')
+        else:
+            # Save reminder with existing medicine
+            form.save()
+            messages.success(request, 'Reminder set!')
         return redirect('reminder_list')
     return render(request, 'reminders/form.html', {'form': form, 'title': 'Add Reminder'})
 

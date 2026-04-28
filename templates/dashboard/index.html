@@ -18,18 +18,25 @@
     <div class="glass-card stat-card">
         <div class="stat-icon">🔔</div>
         <div class="stat-value">{{ reminders.count }}</div>
-        <div class="stat-label">Reminders Set</div>
+        <div class="stat-label">Active Reminders</div>
     </div>
     <div class="glass-card stat-card">
         <div class="stat-icon">💊</div>
-        <div class="stat-value">{{ user.medicine_set.count }}</div>
+        <div class="stat-value">{{ total_medicines }}</div>
         <div class="stat-label">Medicines</div>
     </div>
     <div class="glass-card stat-card">
-        <div class="stat-icon">✅</div>
-        <div class="stat-value">98%</div>
-        <div class="stat-label">Health Score</div>
+        <div class="stat-icon">📋</div>
+        <div class="stat-value">{{ categories_count }}</div>
+        <div class="stat-label">Categories</div>
     </div>
+    {% if low_stock_medicines > 0 %}
+    <div class="glass-card stat-card" style="border: 1px solid var(--warning); background: rgba(255, 193, 7, 0.1);">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-value">{{ low_stock_medicines }}</div>
+        <div class="stat-label">Low Stock</div>
+    </div>
+    {% endif %}
 </div>
 
 <div class="page-header">
@@ -40,38 +47,40 @@
 </div>
 
 {% if reminders %}
-    <div class="reminder-grid">
-        {% for reminder in reminders %}
-            <div class="glass-card reminder-card card-3d">
-                <div class="med-name">{{ reminder.medicine.name }}</div>
-                <div class="med-dosage">{{ reminder.medicine.dosage }}</div>
-                <div style="color:var(--text-muted); font-size:0.75rem; margin-bottom:1rem; opacity:0.8;">
-                    🏷️ {{ reminder.medicine.category|default:"General" }}
-                </div>
-                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
-                    <div class="reminder-time" data-reminder-time="{{ reminder.time|time:'H:i' }}" data-reminder-id="{{ reminder.pk }}" data-medicine-name="{{ reminder.medicine.name }}">
-                        <span class="material-symbols-outlined" style="font-size:1rem;">schedule</span>
-                        {{ reminder.time|time:"h:i A" }}
-                        {% if reminder.date %} | 📅 {{ reminder.date|date:"M d" }}{% endif %}
-                    </div>
-                    <div style="display:flex; gap:0.5rem;">
-                        <a href="{% url 'reminder_edit' reminder.pk %}" class="btn btn-ghost btn-sm" title="Edit">
-                            <span class="material-symbols-outlined" style="font-size:1.1rem;">edit</span>
-                        </a>
-                        <a href="{% url 'reminder_delete' reminder.pk %}" class="btn btn-ghost btn-sm" style="color:var(--error);" title="Delete">
-                            <span class="material-symbols-outlined" style="font-size:1.1rem;">delete</span>
-                        </a>
-                    </div>
-                </div>
+<div class="reminder-grid">
+    {% for reminder in reminders %}
+    <div class="glass-card reminder-card card-3d">
+        <div class="med-name">{{ reminder.medicine.name }}</div>
+        <div class="med-dosage">{{ reminder.medicine.dosage }}</div>
+        <div style="color:var(--text-muted); font-size:0.75rem; margin-bottom:1rem; opacity:0.8;">
+            🏷️ {{ reminder.medicine.category|default:"General" }}
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+            <div class="reminder-time" data-reminder-time="{{ reminder.time|time:'H:i' }}"
+                data-reminder-id="{{ reminder.pk }}" data-medicine-name="{{ reminder.medicine.name }}">
+                <span class="material-symbols-outlined" style="font-size:1rem;">schedule</span>
+                {{ reminder.time|time:"h:i A" }}
+                {% if reminder.date %} | 📅 {{ reminder.date|date:"M d" }}{% endif %}
             </div>
-        {% endfor %}
+            <div style="display:flex; gap:0.5rem;">
+                <a href="{% url 'reminder_edit' reminder.pk %}" class="btn btn-ghost btn-sm" title="Edit">
+                    <span class="material-symbols-outlined" style="font-size:1.1rem;">edit</span>
+                </a>
+                <a href="{% url 'reminder_delete' reminder.pk %}" class="btn btn-ghost btn-sm"
+                    style="color:var(--error);" title="Delete">
+                    <span class="material-symbols-outlined" style="font-size:1.1rem;">delete</span>
+                </a>
+            </div>
+        </div>
     </div>
+    {% endfor %}
+</div>
 {% else %}
-    <div class="glass-card empty-state">
-        <div class="empty-icon">🌙</div>
-        <div class="empty-title">Everything is quiet</div>
-        <p class="empty-sub">You don't have any reminders set for now.</p>
-        <a href="{% url 'reminder_add' %}" class="btn btn-primary">Create Your First Reminder</a>
-    </div>
+<div class="glass-card empty-state">
+    <div class="empty-icon">🌙</div>
+    <div class="empty-title">Everything is quiet</div>
+    <p class="empty-sub">You don't have any reminders set for now.</p>
+    <a href="{% url 'reminder_add' %}" class="btn btn-primary">Create Your First Reminder</a>
+</div>
 {% endif %}
 {% endblock %}
